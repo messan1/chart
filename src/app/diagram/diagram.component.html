@@ -1,0 +1,92 @@
+<div class="container">
+  <ngx-graph
+    [view]="[900, 900]"
+    [links]="links"
+    [nodes]="nodes"
+    [curve]="curve"
+    [nodeWidth]="50"
+    [nodeHeight]="50"
+    layout="d3ForceDirected"
+    [enableZoom]="true"
+    [autoZoom]="true"
+    [clusters]="[
+      {
+        id: 'cluster0',
+        label: 'Cluster node',
+        childNodeIds: ['2', '3']
+      },
+      {
+        id: 'cluster0',
+        label: 'Cluster node',
+        childNodeIds: ['4', '3']
+      }
+    ]"
+  >
+    <ng-template #defsTemplate>
+      <svg:marker
+        id="arrow"
+        viewBox="0 -5 10 10"
+        refX="8"
+        refY="0"
+        markerWidth="4"
+        markerHeight="4"
+        orient="auto"
+      >
+        <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+      </svg:marker>
+    </ng-template>
+
+    <ng-template #nodeTemplate let-node>
+      <svg:g
+        (click)="click(node)"
+        class="node"
+        xmlns="http://www.w3.org/2000/xhtml"
+        width="50"
+        height="50"
+      >
+        <svg:foreignObject width="150" height="100">
+          <xhtml:div
+            class="cardContainer"
+            xmlns="http://www.w3.org/1999/xhtml"
+            [ngStyle]="getStyles(node)"
+          >
+            <label class="name">{{ node.label }}</label>
+          </xhtml:div>
+        </svg:foreignObject>
+      </svg:g>
+    </ng-template>
+
+    <ng-template #linkTemplate let-link>
+      <svg:g class="edge">
+        <svg:path
+          class="line"
+          stroke-width="2"
+          marker-end="url(#arrow)"
+        ></svg:path>
+        <svg:text class="edge-label" text-anchor="middle">
+          <textPath
+            class="text-path"
+            [attr.href]="'#' + link.id"
+            [style.dominant-baseline]="link.dominantBaseline"
+            startOffset="50%"
+          >
+            {{ link.data.linkText }}
+          </textPath>
+        </svg:text>
+      </svg:g>
+    </ng-template>
+  </ngx-graph>
+
+  <div *ngIf="information" class="info">
+    <h1>Informations</h1>
+    <h2>Nom:{{ information.label }}</h2>
+    <h2>Poste:{{ information.data.role }}</h2>
+    <h2>Bureau:{{ information.data.office }}</h2>
+    <p>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet
+      voluptatibus rerum quas, molestiae iste illo ex nobis ullam doloribus,
+      quis voluptas labore. Consectetur recusandae aperiam, pariatur magnam
+      error sint inventore.
+    </p>
+  </div>
+</div>
